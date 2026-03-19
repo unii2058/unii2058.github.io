@@ -4,76 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parallel | P.R.I.S.M. Internal Network</title>
+    <script>
+        // 새로고침 감지 - 즉시 메인으로 리다이렉트
+        const navEntries = performance.getEntriesByType('navigation');
+        if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+            sessionStorage.clear();
+            localStorage.removeItem('prism_bgm_volume');
+            localStorage.removeItem('prism_bgm_time');
+            localStorage.removeItem('prism_bgm_playing');
+            localStorage.removeItem('prism_bgm_muted');
+            window.location.replace('/index.html');
+        }
+    </script>
     <link rel="preload" href="prism.mp3" as="audio">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Loading Screen */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
-            z-index: 100000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading-screen.fade-out {
-            animation: loadingFadeOut 0.5s ease forwards;
-        }
-
-        @keyframes loadingFadeOut {
-            to { opacity: 0; visibility: hidden; pointer-events: none; }
-        }
-
-        .loading-logo {
-            font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            letter-spacing: 0.3em;
-            color: #4a9fd4;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 30px rgba(74, 159, 212, 0.5);
-        }
-
-        .loading-bar-container {
-            width: 200px;
-            height: 2px;
-            background: rgba(74, 159, 212, 0.2);
-            border-radius: 1px;
-            overflow: hidden;
-        }
-
-        .loading-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #4a9fd4, #81c3eb);
-            box-shadow: 0 0 10px rgba(74, 159, 212, 0.8);
-            transition: width 0.1s ease;
-        }
-
-        .loading-text {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            color: rgba(74, 159, 212, 0.7);
-            margin-top: 1rem;
-            letter-spacing: 0.2em;
-        }
-
-        .main-content {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .main-content.visible {
-            opacity: 1;
-        }
-
         :root {
             --bg-main: #fafafa;
             --bg-white: #ffffff;
@@ -783,16 +730,6 @@
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loading-screen">
-        <div class="loading-logo">P.R.I.S.M.</div>
-        <div class="loading-bar-container">
-            <div class="loading-bar" id="loading-bar"></div>
-        </div>
-        <div class="loading-text">CONNECTING...</div>
-    </div>
-
-    <div class="main-content" id="main-content">
     <nav>
         <a href="/index.html" class="logo-area">
             <div class="logo-symbol">✦</div>
@@ -1026,7 +963,6 @@
             </article>
         </div>
     </main>
-    </div><!-- end main-content -->
 
     <!-- Background Music -->
     <audio id="bgm" loop preload="auto">
@@ -1034,31 +970,6 @@
     </audio>
 
     <script>
-        // ========== LOADING SCREEN ==========
-        const loadingScreen = document.getElementById('loading-screen');
-        const mainContent = document.getElementById('main-content');
-        const loadingBar = document.getElementById('loading-bar');
-        
-        const navEntries = performance.getEntriesByType('navigation');
-        const isReload = navEntries.length > 0 && navEntries[0].type === 'reload';
-        const hasVisited = sessionStorage.getItem('prism_gallery_visited');
-        
-        if (isReload) {
-            // 새로고침: 메인 화면으로 리다이렉트
-            sessionStorage.clear();
-            localStorage.removeItem('prism_bgm_volume');
-            localStorage.removeItem('prism_bgm_time');
-            localStorage.removeItem('prism_bgm_playing');
-            localStorage.removeItem('prism_bgm_muted');
-            window.location.href = '/index.html';
-            return;
-        }
-        
-        // 로딩 스킵 (페이지 이동 시)
-        loadingScreen.style.display = 'none';
-        mainContent.classList.add('visible');
-        sessionStorage.setItem('prism_gallery_visited', 'true');
-
         // ========== MUSIC PLAYER WITH PERSISTENCE ==========
         const musicBtn = document.getElementById('music-btn');
         const bgm = document.getElementById('bgm');
