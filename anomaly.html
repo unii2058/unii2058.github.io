@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANOMALY DATABASE | P.R.I.S.M.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Oxanium:wght@200;300;400;500;600;700&family=Noto+Sans+KR:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-void: #080808;
+            --bg-panel: #0c0c0c;
+            --bg-card: #101010;
+            --bg-hover: #141414;
+            --line-dim: rgba(255, 255, 255, 0.06);
+            --line-mid: rgba(255, 255, 255, 0.12);
+            --line-bright: rgba(255, 255, 255, 0.25);
+            --line-white: rgba(255, 255, 255, 0.85);
+            --text-dim: rgba(255, 255, 255, 0.35);
+            --text-mid: rgba(255, 255, 255, 0.6);
+            --text-bright: rgba(255, 255, 255, 0.9);
+            --accent-white: #ffffff;
+            --accent-gray: #888888;
+            --font-tech: 'Oxanium', 'Noto Sans KR', sans-serif;
+            --font-ui: 'Rajdhani', 'Noto Sans KR', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: var(--font-ui);
+            background: var(--bg-void);
+            color: var(--text-bright);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Scanline overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Animated grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 200%; height: 200%;
+            background-image: 
+                linear-gradient(var(--line-dim) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line-dim) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridScroll 60s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-60px, -60px); }
+        }
+
+        /* Global animations */
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            92% { opacity: 1; }
+            93% { opacity: 0.3; }
+            94% { opacity: 1; }
+            96% { opacity: 0.5; }
+            97% { opacity: 1; }
+        }
+
+        @keyframes dataStream {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100px; }
+        }
+
+        @keyframes expandRing {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--bg-void);
+            border-bottom: 1px solid var(--line-dim);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5rem;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-icon {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--line-bright);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-mid);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .nav-title {
+            font-family: var(--font-tech);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            color: var(--text-bright);
+        }
+
+        .nav-back {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-family: var(--font-tech);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            padding: 0.5rem 1.25rem;
+            border: 1px solid var(--line-mid);
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            color: var(--text-bright);
+            border-color: var(--line-bright);
+            background: var(--bg-hover);
+        }
+
+        /* Main */
+        main {
+            padding: 100px 3rem 5rem;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+        }
+
+        .header-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .header-line::before,
+        .header-line::after {
+            content: '';
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--line-bright));
+        }
+
+        .header-line::after {
+            background: linear-gradient(90deg, var(--line-bright), transparent);
+        }
+
+        .header-tag {
+            font-family: var(--font-tech);
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 0.5em;
+            color: var(--text-dim);
+        }
+
+        .page-title {
+            font-family: var(--font-tech);
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 0.5em;
+            color: var(--text-bright);
+            margin-bottom: 1rem;
+            animation: flicker 8s infinite;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .page-subtitle {
+            font-family: var(--font-ui);
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            letter-spacing: 0.2em;
+        }
+
+        /* Status indicators */
+        .status-row {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 2.5rem;
+            padding: 1.25rem 0;
+            border-top: 1px solid var(--line-dim);
+            border-bottom: 1px solid var(--line-dim);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--font-tech);
+            font-size: 0.6rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            color: var(--text-dim);
+        }
+
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--text-dim);
+        }
+
+        .status-dot.active { 
+            background: var(--accent-white);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Anomaly Grid */
+        .anomaly-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        /* Anomaly Card */
+        .anomaly-card {
+            background: var(--bg-card);
+            border: 1px solid var(--line-dim);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .anomaly-card:hover {
+            border-color: var(--line-bright);
+            background: var(--bg-hover);
+            transform: translateY(-5px);
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 0 30px rgba(255, 255, 255, 0.02);
+        }
+
+        /* Card corner decorations */
+        .anomaly-card::before,
+        .anomaly-card::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-color: var(--line-mid);
+            border-style: solid;
+            transition: border-color 0.3s ease;
+        }
+
+        .anomaly-card::before {
+            top: 8px; left: 8px;
+            border-width: 1px 0 0 1px;
+        }
+
+        .anomaly-card::after {
+            bottom: 8px; right: 8px;
+            border-width: 0 1px 1px 0;
+        }
+
+        .anomaly-card:hover::before,
+        .anomaly-card:hover::after {
+            border-color: var(--line-bright);
+        }
+
+        /* Card header */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 1.5rem 1.75rem;
+            border-bottom: 1px solid var(--line-dim);
+        }
+
+        .card-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card-type {
+            font-family: var(--font-tech);
+            font-size: 0.55rem;
+            font-weight: 400;
+            letter-spacing: 0.25em;
+            color: var(--text-dim);
+            padding: 0.3rem 0.75rem;
+            border: 1px solid var(--line-mid);
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .card-name {
+            font-family: var(--font-tech);
+            font-size: 1.4rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            color: var(--text-bright);
+        }
+
+        .card-id {
+            font-family: var(--font-tech);
+            font-size: 0.55rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            padding: 0.4rem 0.6rem;
+            border: 1px solid var(--line-dim);
+            background: var(--bg-void);
+        }
+
+        /* HUD Visual Area */
+        .card-visual {
+            height: 240px;
+            background: var(--bg-void);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Scan line effect */
+        .card-visual .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: scan 4s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        /* Outer rotating ring */
+        .hud-ring-outer {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border: 1px solid var(--line-dim);
+            border-radius: 50%;
+            border-top-color: var(--line-bright);
+            animation: rotate 12s linear infinite;
+        }
+
+        /* Wireframe sphere/diamond grid */
+        .hud-frame {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            border: 1px solid var(--line-mid);
+            border-radius: 50%;
+            animation: rotateReverse 20s linear infinite;
+        }
+
+        .hud-frame::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border: 1px solid var(--line-dim);
+            border-radius: 50%;
+        }
+
+        .hud-frame::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 100px;
+            height: 100px;
+            border: 1px solid var(--line-dim);
+            animation: rotate 8s linear infinite;
+        }
+
+        /* Inner pulsing circle */
+        .hud-pulse {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 1px solid var(--line-mid);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Expanding rings */
+        .hud-expand {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 1px solid var(--line-dim);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: expandRing 3s ease-out infinite;
+        }
+
+        .hud-expand:nth-child(2) { animation-delay: 1s; }
+        .hud-expand:nth-child(3) { animation-delay: 2s; }
+
+        /* Grid floor effect */
+        .hud-grid {
+            position: absolute;
+            bottom: 20px;
+            width: 80%;
+            height: 60px;
+            background: 
+                linear-gradient(90deg, var(--line-dim) 1px, transparent 1px),
+                linear-gradient(180deg, var(--line-dim) 1px, transparent 1px);
+            background-size: 20px 15px;
+            transform: perspective(100px) rotateX(60deg);
+            opacity: 0.5;
+            animation: dataStream 2s linear infinite;
+        }
+
+        /* Decorative lines */
+        .hud-line-h {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--line-dim), var(--line-mid), var(--line-dim), transparent);
+        }
+
+        .hud-line-h.top { top: 30px; }
+        .hud-line-h.bottom { bottom: 30px; }
+
+        /* Corner markers with animation */
+        .corner-mark {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--line-mid);
+            border-style: solid;
+            transition: all 0.3s ease;
+        }
+
+        .anomaly-card:hover .corner-mark {
+            border-color: var(--line-bright);
+            width: 25px;
+            height: 25px;
+        }
+
+        .corner-mark.tl { top: 15px; left: 15px; border-width: 1px 0 0 1px; }
+        .corner-mark.tr { top: 15px; right: 15px; border-width: 1px 1px 0 0; }
+        .corner-mark.bl { bottom: 15px; left: 15px; border-width: 0 0 1px 1px; }
+        .corner-mark.br { bottom: 15px; right: 15px; border-width: 0 1px 1px 0; }
+
+        /* Data readout */
+        .hud-data {
+            position: absolute;
+            font-family: var(--font-tech);
+            font-size: 0.5rem;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            animation: flicker 4s infinite;
+        }
+
+        .hud-data.top-left { top: 20px; left: 25px; }
+        .hud-data.top-right { top: 20px; right: 25px; }
+        .hud-data.bottom-left { bottom: 20px; left: 25px; }
+        .hud-data.bottom-right { bottom: 20px; right: 25px; }
+
+        /* Center icon */
+        .hud-icon {
+            position: relative;
+            z-index: 5;
+            font-size: 2rem;
+            color: var(--text-mid);
+            animation: float 3s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .anomaly-card:hover .hud-icon {
+            animation: glitch 0.3s ease, float 3s ease-in-out infinite;
+            color: var(--text-bright);
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Side brackets */
+        .hud-bracket {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .hud-bracket.left {
+            left: 20px;
+            border-left: 1px solid var(--line-mid);
+            border-top: 1px solid var(--line-mid);
+            border-bottom: 1px solid var(--line-mid);
+        }
+
+        .hud-bracket.right {
+            right: 20px;
+            border-right: 1px solid var(--line-mid);
+            border-top: 1px solid var(--line-mid);
+            border-bottom: 1px solid var(--line-mid);
+        }
+
+        /* Card info */
+        .card-info {
+            padding: 1.5rem 1.75rem;
+        }
+
+        .card-desc {
+            font-family: var(--font-ui);
+            font-size: 0.9rem;
+            font-weight: 400;
+            line-height: 1.9;
+            color: var(--text-mid);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Stats row */
+        .card-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--line-dim);
+            border: 1px solid var(--line-dim);
+        }
+
+        .stat-box {
+            background: var(--bg-card);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: var(--font-tech);
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--text-bright);
+            letter-spacing: 0.05em;
+        }
+
+        .stat-label {
+            font-family: var(--font-tech);
+            font-size: 0.5rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            letter-spacing: 0.15em;
+            margin-top: 0.3rem;
+        }
+
+        /* Threat level */
+        .threat-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--line-dim);
+        }
+
+        .threat-label {
+            font-family: var(--font-tech);
+            font-size: 0.55rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-dim);
+        }
+
+        .threat-bars {
+            display: flex;
+            gap: 4px;
+        }
+
+        .threat-bar {
+            width: 24px;
+            height: 3px;
+            background: var(--line-dim);
+            transition: all 0.3s ease;
+        }
+
+        .threat-bar.active {
+            background: var(--accent-white);
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .threat-bar.active:nth-child(1) { animation-delay: 0s; }
+        .threat-bar.active:nth-child(2) { animation-delay: 0.1s; }
+        .threat-bar.active:nth-child(3) { animation-delay: 0.2s; }
+        .threat-bar.active:nth-child(4) { animation-delay: 0.3s; }
+        .threat-bar.active:nth-child(5) { animation-delay: 0.4s; }
+
+        /* Protocol warning */
+        .protocol-box {
+            margin-top: 4rem;
+            padding: 2.5rem;
+            border: 1px solid var(--line-dim);
+            background: var(--bg-card);
+            position: relative;
+        }
+
+        .protocol-box::before {
+            content: 'RESPONSE PROTOCOL';
+            position: absolute;
+            top: -0.6rem;
+            left: 2rem;
+            font-family: var(--font-tech);
+            font-size: 0.55rem;
+            font-weight: 400;
+            letter-spacing: 0.25em;
+            color: var(--text-dim);
+            background: var(--bg-void);
+            padding: 0 1rem;
+        }
+
+        .protocol-title {
+            font-family: var(--font-tech);
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            color: var(--text-bright);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--line-dim);
+        }
+
+        .protocol-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+        }
+
+        .protocol-item h4 {
+            font-family: var(--font-tech);
+            font-size: 0.6rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            color: var(--text-mid);
+            margin-bottom: 0.75rem;
+        }
+
+        .protocol-item p {
+            font-family: var(--font-ui);
+            font-size: 0.85rem;
+            font-weight: 400;
+            line-height: 1.9;
+            color: var(--text-dim);
+        }
+
+        /* Warning */
+        .warning-box {
+            margin-top: 2rem;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid var(--line-mid);
+            background: var(--bg-panel);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .warning-icon {
+            font-size: 1.2rem;
+            color: var(--text-mid);
+        }
+
+        .warning-text {
+            font-family: var(--font-ui);
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--text-mid);
+            letter-spacing: 0.05em;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 5rem;
+            padding: 1.5rem 3rem;
+            border-top: 1px solid var(--line-dim);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            font-family: var(--font-tech);
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            color: var(--text-dim);
+        }
+
+        .footer-meta {
+            font-family: var(--font-tech);
+            font-size: 0.55rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .anomaly-grid { grid-template-columns: 1fr; }
+            .protocol-content { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 0 1.5rem; }
+            main { padding: 90px 1.5rem 3rem; }
+            .page-title { font-size: 1.8rem; letter-spacing: 0.3em; }
+            .status-row { flex-wrap: wrap; gap: 1.5rem; }
+            .card-stats { grid-template-columns: 1fr; }
+            footer { 
+                flex-direction: column; 
+                gap: 1rem; 
+                text-align: center; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">
+            <div class="nav-icon">◈</div>
+            <span class="nav-title">P.R.I.S.M.</span>
+        </div>
+        <a href="index.html" class="nav-back">← RETURN TO MAIN</a>
+    </nav>
+
+    <main>
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-line">
+                <span class="header-tag">RESTRICTED DATABASE</span>
+            </div>
+            <h1 class="page-title">ANOMALY</h1>
+            <p class="page-subtitle">어노말리 분류 인덱스</p>
+
+            <div class="status-row">
+                <div class="status-item">
+                    <span class="status-dot active"></span>
+                    <span>DATABASE ONLINE</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot"></span>
+                    <span>CLEARANCE: ALPHA</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot"></span>
+                    <span>ACTIVE: 47</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Anomaly Grid -->
+        <div class="anomaly-grid">
+            <!-- CREATURE -->
+            <article class="anomaly-card">
+                <div class="card-header">
+                    <div class="card-meta">
+                        <span class="card-type">CREATURE</span>
+                        <h2 class="card-name">크리처</h2>
+                    </div>
+                    <span class="card-id">TYPE-001</span>
+                </div>
+
+                <div class="card-visual">
+                    <div class="scan-line"></div>
+                    <div class="hud-line-h top"></div>
+                    <div class="hud-line-h bottom"></div>
+                    <div class="corner-mark tl"></div>
+                    <div class="corner-mark tr"></div>
+                    <div class="corner-mark bl"></div>
+                    <div class="corner-mark br"></div>
+                    <div class="hud-bracket left"></div>
+                    <div class="hud-bracket right"></div>
+                    <div class="hud-ring-outer"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-frame"></div>
+                    <div class="hud-pulse"></div>
+                    <div class="hud-grid"></div>
+                    <span class="hud-data top-left">SCAN_01</span>
+                    <span class="hud-data top-right">127.0.0</span>
+                    <span class="hud-data bottom-left">ACTIVE</span>
+                    <span class="hud-data bottom-right">A+</span>
+                    <span class="hud-icon">🜏</span>
+                </div>
+
+                <div class="card-info">
+                    <p class="card-desc">
+                        아비수스에서 유래한 물리적 실체를 가진 위협 개체. 대부분 공격적이며 
+                        일반 무기로는 제압이 어렵습니다. 나노 에테르 장비 또는 초능력자의 개입이 필수적입니다.
+                    </p>
+
+                    <div class="card-stats">
+                        <div class="stat-box">
+                            <div class="stat-value">127</div>
+                            <div class="stat-label">REGISTERED</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">A+</div>
+                            <div class="stat-label">THREAT LEVEL</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">물리</div>
+                            <div class="stat-label">FORM</div>
+                        </div>
+                    </div>
+
+                    <div class="threat-row">
+                        <span class="threat-label">THREAT</span>
+                        <div class="threat-bars">
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- GHOST -->
+            <article class="anomaly-card">
+                <div class="card-header">
+                    <div class="card-meta">
+                        <span class="card-type">GHOST</span>
+                        <h2 class="card-name">고스트</h2>
+                    </div>
+                    <span class="card-id">TYPE-002</span>
+                </div>
+
+                <div class="card-visual">
+                    <div class="scan-line"></div>
+                    <div class="hud-line-h top"></div>
+                    <div class="hud-line-h bottom"></div>
+                    <div class="corner-mark tl"></div>
+                    <div class="corner-mark tr"></div>
+                    <div class="corner-mark bl"></div>
+                    <div class="corner-mark br"></div>
+                    <div class="hud-bracket left"></div>
+                    <div class="hud-bracket right"></div>
+                    <div class="hud-ring-outer"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-frame"></div>
+                    <div class="hud-pulse"></div>
+                    <div class="hud-grid"></div>
+                    <span class="hud-data top-left">SCAN_02</span>
+                    <span class="hud-data top-right">089.0.0</span>
+                    <span class="hud-data bottom-left">ACTIVE</span>
+                    <span class="hud-data bottom-right">A</span>
+                    <span class="hud-icon">👁</span>
+                </div>
+
+                <div class="card-info">
+                    <p class="card-desc">
+                        비물질적 영적 개체. 원혼, 악령, 유령 등 인간의 사후 잔류 에너지 또는 
+                        아비수스의 정신 오염으로 발생합니다. 퇴마계 능력자 또는 특수 장비로만 대응 가능합니다.
+                    </p>
+
+                    <div class="card-stats">
+                        <div class="stat-box">
+                            <div class="stat-value">89</div>
+                            <div class="stat-label">REGISTERED</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">A</div>
+                            <div class="stat-label">THREAT LEVEL</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">영적</div>
+                            <div class="stat-label">FORM</div>
+                        </div>
+                    </div>
+
+                    <div class="threat-row">
+                        <span class="threat-label">THREAT</span>
+                        <div class="threat-bars">
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- LIMINAL SPACE -->
+            <article class="anomaly-card">
+                <div class="card-header">
+                    <div class="card-meta">
+                        <span class="card-type">LIMINAL SPACE</span>
+                        <h2 class="card-name">리미널 스페이스</h2>
+                    </div>
+                    <span class="card-id">TYPE-003</span>
+                </div>
+
+                <div class="card-visual">
+                    <div class="scan-line"></div>
+                    <div class="hud-line-h top"></div>
+                    <div class="hud-line-h bottom"></div>
+                    <div class="corner-mark tl"></div>
+                    <div class="corner-mark tr"></div>
+                    <div class="corner-mark bl"></div>
+                    <div class="corner-mark br"></div>
+                    <div class="hud-bracket left"></div>
+                    <div class="hud-bracket right"></div>
+                    <div class="hud-ring-outer"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-frame"></div>
+                    <div class="hud-pulse"></div>
+                    <div class="hud-grid"></div>
+                    <span class="hud-data top-left">SCAN_03</span>
+                    <span class="hud-data top-right">034.0.0</span>
+                    <span class="hud-data bottom-left">UNSTABLE</span>
+                    <span class="hud-data bottom-right">S</span>
+                    <span class="hud-icon">◇</span>
+                </div>
+
+                <div class="card-info">
+                    <p class="card-desc">
+                        현실과 아비수스 사이의 경계 공간. 일반적으로 비어있는 건물, 복도, 계단 등에서 
+                        발현되며 진입 시 공간 왜곡 및 시간 이상 현상이 보고됩니다.
+                    </p>
+
+                    <div class="card-stats">
+                        <div class="stat-box">
+                            <div class="stat-value">34</div>
+                            <div class="stat-label">OBSERVED</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">S</div>
+                            <div class="stat-label">THREAT LEVEL</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">공간</div>
+                            <div class="stat-label">FORM</div>
+                        </div>
+                    </div>
+
+                    <div class="threat-row">
+                        <span class="threat-label">THREAT</span>
+                        <div class="threat-bars">
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar"></div>
+                            <div class="threat-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- CURSE -->
+            <article class="anomaly-card">
+                <div class="card-header">
+                    <div class="card-meta">
+                        <span class="card-type">CURSE / URBAN LEGEND</span>
+                        <h2 class="card-name">저주 · 도시괴담</h2>
+                    </div>
+                    <span class="card-id">TYPE-004</span>
+                </div>
+
+                <div class="card-visual">
+                    <div class="scan-line"></div>
+                    <div class="hud-line-h top"></div>
+                    <div class="hud-line-h bottom"></div>
+                    <div class="corner-mark tl"></div>
+                    <div class="corner-mark tr"></div>
+                    <div class="corner-mark bl"></div>
+                    <div class="corner-mark br"></div>
+                    <div class="hud-bracket left"></div>
+                    <div class="hud-bracket right"></div>
+                    <div class="hud-ring-outer"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-expand"></div>
+                    <div class="hud-frame"></div>
+                    <div class="hud-pulse"></div>
+                    <div class="hud-grid"></div>
+                    <span class="hud-data top-left">SCAN_04</span>
+                    <span class="hud-data top-right">056.0.0</span>
+                    <span class="hud-data bottom-left">VARIABLE</span>
+                    <span class="hud-data bottom-right">B+</span>
+                    <span class="hud-icon">⛧</span>
+                </div>
+
+                <div class="card-info">
+                    <p class="card-desc">
+                        인간의 집단 무의식과 공포에서 현실화된 개념적 위협. 도시괴담, 저주, 미신 등이 
+                        에테르와 결합해 실체화됩니다. 해제 조건이 존재하는 경우가 많습니다.
+                    </p>
+
+                    <div class="card-stats">
+                        <div class="stat-box">
+                            <div class="stat-value">56</div>
+                            <div class="stat-label">CONFIRMED</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">B+</div>
+                            <div class="stat-label">THREAT LEVEL</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">개념</div>
+                            <div class="stat-label">FORM</div>
+                        </div>
+                    </div>
+
+                    <div class="threat-row">
+                        <span class="threat-label">THREAT</span>
+                        <div class="threat-bars">
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar active"></div>
+                            <div class="threat-bar"></div>
+                            <div class="threat-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- Protocol Box -->
+        <div class="protocol-box">
+            <h3 class="protocol-title">대응 프로토콜</h3>
+            <div class="protocol-content">
+                <div class="protocol-item">
+                    <h4>▸ 기본 원칙</h4>
+                    <p>
+                        모든 어노말리 조우 시 즉각적인 링크 연결이 필수입니다. 단독 행동은 엄격히 금지되며, 
+                        등급에 따라 적절한 전력의 요원이 배치됩니다.
+                    </p>
+                </div>
+                <div class="protocol-item">
+                    <h4>▸ 승인 절차</h4>
+                    <p>
+                        S급 이상 개체는 이리스 또는 위원회 직속 팀의 승인이 필요합니다.
+                        긴급 상황 시 현장 지휘관의 재량으로 즉각 대응 가능합니다.
+                    </p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <span class="warning-icon">⚠</span>
+                <span class="warning-text">
+                    어노말리와의 접촉은 정신 오염을 유발할 수 있습니다. 모든 작전 후 필수 심리 검사를 받으십시오.
+                </span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <span class="footer-brand">P.R.I.S.M. ANOMALY DATABASE</span>
+        <span class="footer-meta">CLEARANCE: ALPHA · UPDATED: 2058.03.19</span>
+    </footer>
+</body>
+</html>
