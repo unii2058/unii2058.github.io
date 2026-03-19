@@ -3188,6 +3188,7 @@
         const muteIcon = volumeBtn.querySelector('.mute-icon');
         
         let previousVolume = 0.7;
+        let isTransitioning = false;
 
         // Load saved state from localStorage
         function loadMusicState() {
@@ -3204,29 +3205,52 @@
                 volumeSlider.value = 70;
             }
 
-            if (savedTime !== null) {
-                bgm.currentTime = parseFloat(savedTime);
-            }
-
             if (savedMuted) {
                 bgm.muted = true;
                 volIcon.style.display = 'none';
                 muteIcon.style.display = 'block';
             }
 
-            // Auto-resume if was playing
+            // Set time and play when audio is ready
             if (wasPlaying) {
-                bgm.play().then(() => {
-                    musicBtn.classList.add('playing');
-                }).catch(e => {
-                    // Autoplay blocked, user needs to click
-                    console.log('Autoplay blocked, click to play');
-                });
+                const startPlayback = () => {
+                    if (savedTime !== null) {
+                        bgm.currentTime = parseFloat(savedTime);
+                    }
+                    bgm.play().then(() => {
+                        musicBtn.classList.add('playing');
+                    }).catch(e => {
+                        console.log('Autoplay blocked, click to play');
+                    });
+                };
+
+                // If already can play, start immediately
+                if (bgm.readyState >= 3) {
+                    startPlayback();
+                } else {
+                    // Wait for audio to be ready
+                    bgm.addEventListener('canplay', startPlayback, { once: true });
+                }
+            } else if (savedTime !== null) {
+                bgm.currentTime = parseFloat(savedTime);
             }
         }
 
-        // Save state to localStorage
+        // Save state to localStorage (throttled)
+        let saveTimeout = null;
         function saveMusicState() {
+            if (saveTimeout) return;
+            saveTimeout = setTimeout(() => {
+                localStorage.setItem('prism_bgm_volume', bgm.volume);
+                localStorage.setItem('prism_bgm_time', bgm.currentTime);
+                localStorage.setItem('prism_bgm_playing', !bgm.paused);
+                localStorage.setItem('prism_bgm_muted', bgm.muted);
+                saveTimeout = null;
+            }, 100);
+        }
+
+        // Immediate save for page transitions
+        function saveMusicStateNow() {
             localStorage.setItem('prism_bgm_volume', bgm.volume);
             localStorage.setItem('prism_bgm_time', bgm.currentTime);
             localStorage.setItem('prism_bgm_playing', !bgm.paused);
@@ -3242,7 +3266,7 @@
                 bgm.pause();
                 musicBtn.classList.remove('playing');
             }
-            saveMusicState();
+            saveMusicStateNow();
         });
 
         // Volume slider
@@ -3269,22 +3293,30 @@
                 volIcon.style.display = 'none';
                 muteIcon.style.display = 'block';
             }
-            saveMusicState();
+            saveMusicStateNow();
         });
 
-        // Save time periodically while playing
-        bgm.addEventListener('timeupdate', () => {
-            saveMusicState();
-        });
+        // Save time periodically while playing (throttled)
+        bgm.addEventListener('timeupdate', saveMusicState);
 
         // Reset button state when audio ends (though it loops)
         bgm.addEventListener('ended', () => {
             musicBtn.classList.remove('playing');
-            saveMusicState();
+            saveMusicStateNow();
         });
 
         // Save state before leaving page
-        window.addEventListener('beforeunload', saveMusicState);
+        window.addEventListener('beforeunload', saveMusicStateNow);
+        
+        // Also save on visibility change (for mobile)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) saveMusicStateNow();
+        });
+
+        // Intercept all internal links to save state before navigation
+        document.querySelectorAll('a[href^="/"]').forEach(link => {
+            link.addEventListener('click', saveMusicStateNow);
+        });
 
         // Load state on page load
         loadMusicState();

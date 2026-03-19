@@ -1336,10 +1336,6 @@
                 volumeSlider.value = 70;
             }
 
-            if (savedTime !== null) {
-                bgm.currentTime = parseFloat(savedTime);
-            }
-
             if (savedMuted) {
                 bgm.muted = true;
                 volIcon.style.display = 'none';
@@ -1347,13 +1343,38 @@
             }
 
             if (wasPlaying) {
-                bgm.play().then(() => {
-                    musicBtn.classList.add('playing');
-                }).catch(e => console.log('Autoplay blocked'));
+                const startPlayback = () => {
+                    if (savedTime !== null) {
+                        bgm.currentTime = parseFloat(savedTime);
+                    }
+                    bgm.play().then(() => {
+                        musicBtn.classList.add('playing');
+                    }).catch(e => console.log('Autoplay blocked'));
+                };
+
+                if (bgm.readyState >= 3) {
+                    startPlayback();
+                } else {
+                    bgm.addEventListener('canplay', startPlayback, { once: true });
+                }
+            } else if (savedTime !== null) {
+                bgm.currentTime = parseFloat(savedTime);
             }
         }
 
+        let saveTimeout = null;
         function saveMusicState() {
+            if (saveTimeout) return;
+            saveTimeout = setTimeout(() => {
+                localStorage.setItem('prism_bgm_volume', bgm.volume);
+                localStorage.setItem('prism_bgm_time', bgm.currentTime);
+                localStorage.setItem('prism_bgm_playing', !bgm.paused);
+                localStorage.setItem('prism_bgm_muted', bgm.muted);
+                saveTimeout = null;
+            }, 100);
+        }
+
+        function saveMusicStateNow() {
             localStorage.setItem('prism_bgm_volume', bgm.volume);
             localStorage.setItem('prism_bgm_time', bgm.currentTime);
             localStorage.setItem('prism_bgm_playing', !bgm.paused);
@@ -1368,7 +1389,7 @@
                 bgm.pause();
                 musicBtn.classList.remove('playing');
             }
-            saveMusicState();
+            saveMusicStateNow();
         });
 
         volumeSlider.addEventListener('input', (e) => {
@@ -1393,16 +1414,22 @@
                 volIcon.style.display = 'none';
                 muteIcon.style.display = 'block';
             }
-            saveMusicState();
+            saveMusicStateNow();
         });
 
         bgm.addEventListener('timeupdate', saveMusicState);
         bgm.addEventListener('ended', () => {
             musicBtn.classList.remove('playing');
-            saveMusicState();
+            saveMusicStateNow();
         });
 
-        window.addEventListener('beforeunload', saveMusicState);
+        window.addEventListener('beforeunload', saveMusicStateNow);
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) saveMusicStateNow();
+        });
+        document.querySelectorAll('a[href^="/"]').forEach(link => {
+            link.addEventListener('click', saveMusicStateNow);
+        });
         loadMusicState();
     </script>
 </body>
