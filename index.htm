@@ -2746,7 +2746,7 @@
             <div class="facility-intro fade-in">
                 <p>
                     P.R.I.S.M.는 뉴욕에 위치한 정부 지원과 다국적 기업의 스폰서십을 받는 민간군사 기업형 피노메논 대응 재단입니다. <strong>지하 20층, 지상 53층</strong> 규모의 
-                    첨단 시설입니다. 각 층은 보안 등급에 따라 엄격히 구분되어 운영됩니다.
+                    첨단 시설이며 각 층은 보안 등급에 따라 엄격히 구분되어 운영됩니다.
                 </p>
             </div>
 
@@ -3453,7 +3453,22 @@
             const loadingBar = document.getElementById('loading-bar');
             const loadingPercent = document.getElementById('loading-percent');
             
-            // Check if already visited in this session
+            // 새로고침 감지 - 새로고침 시 모든 상태 초기화
+            const navEntries = performance.getEntriesByType('navigation');
+            const isReload = navEntries.length > 0 && navEntries[0].type === 'reload';
+            
+            if (isReload) {
+                // 새로고침: 모든 저장된 상태 초기화
+                sessionStorage.removeItem('prism_visited');
+                localStorage.removeItem('prism_bgm_volume');
+                localStorage.removeItem('prism_bgm_time');
+                localStorage.removeItem('prism_bgm_playing');
+                localStorage.removeItem('prism_bgm_muted');
+                // 스크롤 맨 위로
+                window.scrollTo(0, 0);
+            }
+            
+            // Check if already visited in this session (페이지 이동 시에만 적용)
             const hasVisited = sessionStorage.getItem('prism_visited');
             
             if (hasVisited) {

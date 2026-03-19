@@ -1299,6 +1299,18 @@
     </audio>
 
     <script>
+        // ========== 새로고침 감지 - 새로고침 시 음악 상태 초기화 ==========
+        const navEntries = performance.getEntriesByType('navigation');
+        const isReload = navEntries.length > 0 && navEntries[0].type === 'reload';
+        
+        if (isReload) {
+            localStorage.removeItem('prism_bgm_volume');
+            localStorage.removeItem('prism_bgm_time');
+            localStorage.removeItem('prism_bgm_playing');
+            localStorage.removeItem('prism_bgm_muted');
+            window.scrollTo(0, 0);
+        }
+
         // ========== MUSIC PLAYER WITH PERSISTENCE ==========
         const musicBtn = document.getElementById('music-btn');
         const bgm = document.getElementById('bgm');
