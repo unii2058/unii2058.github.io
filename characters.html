@@ -116,6 +116,135 @@
         .nav-center a:hover,
         .nav-center a.active { color: var(--blue-primary); }
 
+        /* Music Player */
+        .music-player {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.15rem;
+            margin-right: 1rem;
+        }
+
+        .music-hint {
+            font-family: var(--font-mono);
+            font-size: 0.5rem;
+            color: var(--blue-accent);
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .music-btn {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            min-height: 30px;
+            flex-shrink: 0;
+            border: 1px solid var(--blue-pale);
+            background: var(--blue-ice);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            background: var(--blue-pale);
+            transform: scale(1.05);
+        }
+
+        .music-btn.playing {
+            background: var(--blue-accent);
+            border-color: var(--blue-accent);
+            box-shadow: 0 0 15px rgba(74, 159, 212, 0.4);
+        }
+
+        .music-btn svg {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+            fill: var(--blue-primary);
+            transition: fill 0.3s ease;
+        }
+
+        .music-btn.playing svg { fill: white; }
+        .music-btn .pause-icon { display: none; }
+        .music-btn.playing .play-icon { display: none; }
+        .music-btn.playing .pause-icon { display: block; }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .volume-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .volume-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--blue-primary);
+        }
+
+        .volume-slider {
+            width: 60px;
+            height: 4px;
+            -webkit-appearance: none;
+            background: var(--blue-pale);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--blue-accent);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .sound-wave {
+            display: none;
+            align-items: flex-end;
+            gap: 2px;
+            height: 16px;
+        }
+
+        .music-btn.playing ~ .sound-wave { display: flex; }
+
+        .sound-wave span {
+            width: 3px;
+            background: var(--blue-accent);
+            border-radius: 2px;
+            animation: soundWave 0.8s ease-in-out infinite;
+        }
+
+        .sound-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .sound-wave span:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+        .sound-wave span:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+        .sound-wave span:nth-child(4) { height: 16px; animation-delay: 0.3s; }
+
+        @keyframes soundWave {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1); }
+        }
+
         .nav-status {
             font-family: var(--font-mono);
             font-size: 0.6rem;
@@ -471,7 +600,13 @@
         }
 
         @media (max-width: 768px) {
-            nav { padding: 1rem 2rem; }
+            nav { 
+                padding: 0.6rem 1.2rem; 
+                padding-top: calc(0.6rem + env(safe-area-inset-top, 0px));
+                min-height: calc(55px + env(safe-area-inset-top, 0px));
+            }
+            .logo-symbol { width: 30px; height: 30px; font-size: 9px; }
+            .logo-text { font-size: 0.9rem; letter-spacing: 0.12em; }
             .nav-center {
                 position: fixed;
                 top: 0; right: -100%;
@@ -486,10 +621,25 @@
             }
             .nav-center.active { right: 0; }
             .nav-status { display: none; }
+            .music-player { 
+                margin-right: 0.5rem; 
+                flex-direction: column;
+                align-items: center;
+                gap: 0.15rem;
+            }
+            .music-player .sound-wave { display: none !important; }
+            .music-hint { 
+                display: block; 
+                font-size: 0.5rem;
+                order: -1;
+            }
+            .music-btn { width: 26px; height: 26px; min-width: 26px; min-height: 26px; }
+            .music-btn svg { width: 10px; height: 10px; }
+            .volume-control { display: none; }
             .menu-toggle { display: flex; }
 
             .page-header { padding: 8rem 2rem 3rem; }
-            .filter-section { padding: 1.5rem 2rem; top: 60px; }
+            .filter-section { padding: 1.5rem 2rem; top: calc(55px + env(safe-area-inset-top, 0px)); }
             .characters-section { padding: 2rem; }
 
             .characters-grid {
@@ -533,6 +683,23 @@
             <li><a href="characters.html" class="active">CHARACTERS</a></li>
             <li><a href="gallery.html">GALLERY</a></li>
         </ul>
+        <div class="music-player">
+            <span class="music-hint">BGM ♪</span>
+            <button class="music-btn" id="music-btn" title="P.R.I.S.M. BGM">
+                <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg class="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <div class="volume-control">
+                <button class="volume-btn" id="volume-btn" title="Mute">
+                    <svg class="vol-icon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    <svg class="mute-icon" style="display:none;" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                </button>
+                <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="70">
+            </div>
+            <div class="sound-wave">
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
         <span class="nav-status">SYS.ONLINE</span>
         <div class="menu-toggle">
             <span></span><span></span><span></span>
@@ -749,7 +916,105 @@
         <p class="footer-copyright">© 2058 P.R.I.S.M. FOUNDATION. ALL RIGHTS RESERVED.</p>
     </footer>
 
+    <!-- Background Music -->
+    <audio id="bgm" loop>
+        <source src="prism.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
+        // ========== MUSIC PLAYER WITH PERSISTENCE ==========
+        const musicBtn = document.getElementById('music-btn');
+        const bgm = document.getElementById('bgm');
+        const volumeSlider = document.getElementById('volume-slider');
+        const volumeBtn = document.getElementById('volume-btn');
+        const volIcon = volumeBtn.querySelector('.vol-icon');
+        const muteIcon = volumeBtn.querySelector('.mute-icon');
+        
+        let previousVolume = 0.7;
+
+        function loadMusicState() {
+            const savedVolume = localStorage.getItem('prism_bgm_volume');
+            const savedTime = localStorage.getItem('prism_bgm_time');
+            const wasPlaying = localStorage.getItem('prism_bgm_playing') === 'true';
+            const savedMuted = localStorage.getItem('prism_bgm_muted') === 'true';
+
+            if (savedVolume !== null) {
+                bgm.volume = parseFloat(savedVolume);
+                volumeSlider.value = parseFloat(savedVolume) * 100;
+            } else {
+                bgm.volume = 0.7;
+                volumeSlider.value = 70;
+            }
+
+            if (savedTime !== null) {
+                bgm.currentTime = parseFloat(savedTime);
+            }
+
+            if (savedMuted) {
+                bgm.muted = true;
+                volIcon.style.display = 'none';
+                muteIcon.style.display = 'block';
+            }
+
+            if (wasPlaying) {
+                bgm.play().then(() => {
+                    musicBtn.classList.add('playing');
+                }).catch(e => console.log('Autoplay blocked'));
+            }
+        }
+
+        function saveMusicState() {
+            localStorage.setItem('prism_bgm_volume', bgm.volume);
+            localStorage.setItem('prism_bgm_time', bgm.currentTime);
+            localStorage.setItem('prism_bgm_playing', !bgm.paused);
+            localStorage.setItem('prism_bgm_muted', bgm.muted);
+        }
+
+        musicBtn.addEventListener('click', () => {
+            if (bgm.paused) {
+                bgm.play();
+                musicBtn.classList.add('playing');
+            } else {
+                bgm.pause();
+                musicBtn.classList.remove('playing');
+            }
+            saveMusicState();
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            bgm.volume = volume;
+            bgm.muted = false;
+            volIcon.style.display = 'block';
+            muteIcon.style.display = 'none';
+            previousVolume = volume;
+            saveMusicState();
+        });
+
+        volumeBtn.addEventListener('click', () => {
+            if (bgm.muted) {
+                bgm.muted = false;
+                volIcon.style.display = 'block';
+                muteIcon.style.display = 'none';
+                volumeSlider.value = previousVolume * 100;
+            } else {
+                previousVolume = bgm.volume;
+                bgm.muted = true;
+                volIcon.style.display = 'none';
+                muteIcon.style.display = 'block';
+            }
+            saveMusicState();
+        });
+
+        bgm.addEventListener('timeupdate', saveMusicState);
+        bgm.addEventListener('ended', () => {
+            musicBtn.classList.remove('playing');
+            saveMusicState();
+        });
+
+        window.addEventListener('beforeunload', saveMusicState);
+        loadMusicState();
+
         // Mobile Menu
         const menuToggle = document.querySelector('.menu-toggle');
         const navCenter = document.querySelector('.nav-center');
