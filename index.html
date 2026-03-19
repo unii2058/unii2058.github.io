@@ -624,6 +624,91 @@
         .nav-center a:hover { color: var(--blue-primary); }
         .nav-center a:hover::after { width: 100%; }
 
+        /* Music Player Button */
+        .music-player {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .music-hint {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--blue-accent);
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+
+        .music-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--blue-pale);
+            background: var(--blue-ice);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .music-btn:hover {
+            background: var(--blue-pale);
+            transform: scale(1.05);
+        }
+
+        .music-btn.playing {
+            background: var(--blue-accent);
+            border-color: var(--blue-accent);
+            box-shadow: 0 0 15px rgba(74, 159, 212, 0.4);
+        }
+
+        .music-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--blue-primary);
+            transition: fill 0.3s ease;
+        }
+
+        .music-btn.playing svg {
+            fill: var(--white-pure);
+        }
+
+        .music-btn .pause-icon { display: none; }
+        .music-btn.playing .play-icon { display: none; }
+        .music-btn.playing .pause-icon { display: block; }
+
+        /* Sound wave animation */
+        .sound-wave {
+            display: none;
+            align-items: flex-end;
+            gap: 2px;
+            height: 16px;
+        }
+
+        .music-btn.playing + .sound-wave {
+            display: flex;
+        }
+
+        .sound-wave span {
+            width: 3px;
+            background: var(--blue-accent);
+            border-radius: 2px;
+            animation: soundWave 0.8s ease-in-out infinite;
+        }
+
+        .sound-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .sound-wave span:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+        .sound-wave span:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+        .sound-wave span:nth-child(4) { height: 16px; animation-delay: 0.3s; }
+
+        @keyframes soundWave {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1); }
+        }
+
         .nav-status {
             font-family: var(--font-mono);
             font-size: 0.6rem;
@@ -2183,6 +2268,9 @@
             }
             .nav-center.active { right: 0; }
             .nav-status { display: none; }
+            .music-player { margin-right: 0.5rem; }
+            .music-player .sound-wave { display: none !important; }
+            .music-hint { display: none; }
             .menu-toggle { display: flex; }
             section { padding: 4rem 2rem; }
             .hero-decoration, .hero-footer { display: none; }
@@ -2384,6 +2472,16 @@
             <li><a href="characters.html">CHARACTERS</a></li>
             <li><a href="gallery.html">GALLERY</a></li>
         </ul>
+        <div class="music-player">
+            <span class="music-hint">BGM ♪</span>
+            <button class="music-btn" id="music-btn" title="P.R.I.S.M. BGM">
+                <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg class="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <div class="sound-wave">
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
         <span class="nav-status">SYS.ONLINE</span>
         <div class="menu-toggle">
             <span></span><span></span><span></span>
@@ -2399,7 +2497,7 @@
         <div class="hero-decoration">
             <div class="left">
                 <div class="wire-globe"></div>
-                <span>EST. 2030</span>
+                <span>EST. 2032</span>
             </div>
             <div class="right">
                 <span>NEW YORK CITY</span>
@@ -2423,7 +2521,7 @@
         </div>
 
         <div class="hero-bottom">
-            <p class="hero-slogan">"평범하게, 군중에 스며들자"</p>
+            <p class="hero-slogan">"인류는 파멸속에서 다시 한번 일어났습니다."</p>
             <p class="hero-desc">
                 시초의 재앙 이후, 인류는 새로운 위협과 마주했습니다.<br>
                 아비수스에서 유입된 미지의 에너지는 세계를 변화시켰고,<br>
@@ -2469,8 +2567,8 @@
                     현재 사회는 표면적으로 안정을 되찾았습니다.
                 </p>
                 <p>
-                    그러나 위협은 사라지지 않았습니다.
-                    <span class="accent">어노말리</span>—리미널 스페이스, 괴이, 저주, 도시괴담, 크리처—는
+                    그러나 위협은 사라지지 않았습니다. 2년 주기로 찾아오는 대규모 아비수스 「웨이브」<br>
+                    <span class="accent">어노말리</span>—리미널 스페이스, 괴이, 저주, 도시괴담은
                     여전히 우리 곁에 은밀히 잠복해 있으며,
                     P.R.I.S.M.은 이들을 조용히 처리하고 있습니다.
                 </p>
@@ -2491,7 +2589,7 @@
                         <p>시초의 재앙 발생</p>
                     </div>
                     <div class="timeline-cell">
-                        <span>2030</span>
+                        <span>2032</span>
                         <p>P.R.I.S.M. 창설</p>
                     </div>
                     <div class="timeline-cell">
@@ -2822,7 +2920,7 @@
                 <h3>2인 1조 파트너 시스템</h3>
                 <p>
                     어노말리 및 리미널 스페이스와의 접촉 시 발생하는
-                    <strong>멘탈 붕괴를 방지</strong>하기 위해 개발된 뇌파 연결 시스템입니다.
+                    <strong>패닉 및 전의 상실을 방지</strong>하기 위해 프리즘 자체 개발 뇌파 연결 시스템입니다.
                     마이크로칩 이식을 통해 두 요원의 의식을 동기화하며,
                     서로의 파트너를 <strong>'메이트'</strong>라 호칭합니다.
                 </p>
@@ -2932,7 +3030,7 @@
                 <p class="footer-tagline">"평범하게, 군중에 스며들자"</p>
                 <p class="footer-description">
                     Phenomenon Response & Incursion Suppression Matrix.
-                    뉴욕 거점 피노메논 대응 재단. EST. 2030
+                    뉴욕 거점 피노메논 대응 재단. EST. 2032
                 </p>
             </div>
             <div>
@@ -2973,7 +3071,31 @@
     
     </div><!-- End main-content -->
 
+    <!-- Background Music -->
+    <audio id="bgm" loop>
+        <source src="prism.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
+        // Music Player Control
+        const musicBtn = document.getElementById('music-btn');
+        const bgm = document.getElementById('bgm');
+        
+        musicBtn.addEventListener('click', () => {
+            if (bgm.paused) {
+                bgm.play();
+                musicBtn.classList.add('playing');
+            } else {
+                bgm.pause();
+                musicBtn.classList.remove('playing');
+            }
+        });
+
+        // Reset button state when audio ends (though it loops)
+        bgm.addEventListener('ended', () => {
+            musicBtn.classList.remove('playing');
+        });
+
         // Mobile Menu
         const menuToggle = document.querySelector('.menu-toggle');
         const navCenter = document.querySelector('.nav-center');
