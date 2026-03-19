@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHARACTERS | P.R.I.S.M.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Serif+KR:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white-pure: #ffffff;
+            --white-soft: #f9fbfd;
+            --white-blue: #f4f7fa;
+            --cream-cold: #edf1f5;
+            --silver: #dce3eb;
+            --blue-deep: #0d1b2a;
+            --blue-dark: #1b263b;
+            --blue-navy: #243b55;
+            --blue-primary: #2d5a87;
+            --blue-mid: #3a7ca5;
+            --blue-accent: #4a9fd4;
+            --blue-light: #81c3eb;
+            --blue-pale: #b8ddf0;
+            --blue-ice: #d4eaf7;
+            --gray-dark: #374151;
+            --gray-mid: #6b7280;
+            --gray-light: #9ca3af;
+            --danger: #dc2626;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --font-display: 'Cinzel', serif;
+            --font-elegant: 'Cormorant Garamond', 'Noto Serif KR', serif;
+            --font-mono: 'Space Mono', monospace;
+            --font-body: 'Noto Serif KR', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background: var(--white-soft);
+            color: var(--blue-deep);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        ::selection { background: var(--blue-accent); color: var(--white-pure); }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1.25rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--cream-cold);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo-symbol {
+            width: 38px; height: 38px;
+            border: 1.5px solid var(--blue-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--blue-primary);
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            letter-spacing: 0.25em;
+            color: var(--blue-deep);
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-center a {
+            font-family: var(--font-elegant);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: var(--gray-mid);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-center a:hover,
+        .nav-center a.active { color: var(--blue-primary); }
+
+        .nav-status {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            color: var(--blue-accent);
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--blue-pale);
+            background: var(--blue-ice);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .menu-toggle span {
+            width: 20px; height: 1px;
+            background: var(--blue-deep);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 10rem 4rem 5rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--white-pure) 0%, var(--white-blue) 100%);
+            border-bottom: 1px solid var(--cream-cold);
+        }
+
+        .page-tag {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            color: var(--blue-accent);
+            margin-bottom: 1rem;
+        }
+
+        .page-tag::before,
+        .page-tag::after {
+            content: '';
+            width: 35px; height: 1px;
+            background: var(--blue-pale);
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            color: var(--blue-deep);
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-family: var(--font-elegant);
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--gray-mid);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            padding: 2rem 4rem;
+            background: var(--white-pure);
+            border-bottom: 1px solid var(--cream-cold);
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            font-family: var(--font-elegant);
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            padding: 0.65rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--silver);
+            color: var(--gray-mid);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--blue-primary);
+            color: var(--blue-primary);
+        }
+
+        .filter-tab.active {
+            background: var(--blue-deep);
+            border-color: var(--blue-deep);
+            color: var(--white-pure);
+        }
+
+        /* Characters Section */
+        .characters-section {
+            padding: 4rem;
+            background: var(--cream-cold);
+            min-height: 60vh;
+        }
+
+        .characters-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        /* Character Card */
+        .character-card {
+            background: var(--white-pure);
+            border: 1px solid var(--silver);
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .character-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(13, 27, 42, 0.12);
+        }
+
+        .character-image {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--white-blue) 0%, var(--cream-cold) 100%);
+        }
+
+        .character-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .character-card:hover .character-image img {
+            transform: scale(1.05);
+        }
+
+        .character-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-family: var(--font-elegant);
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--gray-light);
+        }
+
+        .character-placeholder::before {
+            content: '✦';
+            font-size: 2.5rem;
+            color: var(--blue-pale);
+        }
+
+        .character-rank {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            padding: 0.35rem 0.75rem;
+            background: var(--blue-deep);
+            color: var(--white-pure);
+        }
+
+        .character-rank.sss { background: linear-gradient(135deg, #c9a227, #f7d75a); color: var(--blue-deep); }
+        .character-rank.ss { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+        .character-rank.s { background: linear-gradient(135deg, var(--blue-accent), var(--blue-light)); }
+        .character-rank.a { background: var(--success); }
+        .character-rank.b { background: var(--blue-primary); }
+
+        .character-info {
+            padding: 1.75rem;
+        }
+
+        .character-codename {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--blue-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .character-name {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: var(--blue-deep);
+            margin-bottom: 0.75rem;
+        }
+
+        .character-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta-tag {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            letter-spacing: 0.1em;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid var(--cream-cold);
+            color: var(--gray-mid);
+        }
+
+        .meta-tag.type-combat { border-color: var(--danger); color: var(--danger); }
+        .meta-tag.type-support { border-color: var(--success); color: var(--success); }
+        .meta-tag.type-exorcist { border-color: #8b5cf6; color: #8b5cf6; }
+        .meta-tag.blessing { border-color: var(--warning); color: var(--warning); }
+
+        .character-desc {
+            font-family: var(--font-elegant);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--gray-mid);
+            margin-bottom: 1rem;
+        }
+
+        .character-details {
+            padding-top: 1rem;
+            border-top: 1px solid var(--cream-cold);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .detail-label {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            letter-spacing: 0.1em;
+            color: var(--gray-light);
+        }
+
+        .detail-value {
+            font-family: var(--font-elegant);
+            font-size: 0.85rem;
+            color: var(--blue-deep);
+        }
+
+        /* Add Guide */
+        .add-guide {
+            max-width: 900px;
+            margin: 4rem auto 0;
+            padding: 2.5rem;
+            background: var(--white-pure);
+            border: 1px solid var(--silver);
+        }
+
+        .add-guide h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--blue-deep);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .add-guide p {
+            font-family: var(--font-elegant);
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: var(--gray-mid);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .add-guide code {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            background: var(--blue-ice);
+            padding: 1.5rem;
+            color: var(--blue-navy);
+            border: 1px solid var(--blue-pale);
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--blue-deep);
+            color: var(--white-pure);
+            padding: 3rem 4rem;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .footer-links a {
+            font-family: var(--font-elegant);
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover { color: var(--white-pure); }
+
+        .footer-copyright {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.05em;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .characters-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 2rem; }
+            .nav-center {
+                position: fixed;
+                top: 0; right: -100%;
+                width: 75%; max-width: 280px; height: 100vh;
+                background: var(--white-pure);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 1.5rem;
+                transition: right 0.4s ease;
+                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            }
+            .nav-center.active { right: 0; }
+            .nav-status { display: none; }
+            .menu-toggle { display: flex; }
+
+            .page-header { padding: 8rem 2rem 3rem; }
+            .filter-section { padding: 1.5rem 2rem; top: 60px; }
+            .characters-section { padding: 2rem; }
+
+            .characters-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .add-guide { margin: 2rem 0 0; padding: 1.5rem; }
+            .add-guide code { font-size: 0.6rem; padding: 1rem; }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--cream-cold); }
+        ::-webkit-scrollbar-thumb { background: var(--blue-light); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo-area">
+            <div class="logo-symbol">✦</div>
+            <span class="logo-text">P.R.I.S.M.</span>
+        </a>
+        <ul class="nav-center">
+            <li><a href="index.html#about">ABOUT</a></li>
+            <li><a href="index.html#facility">FACILITY</a></li>
+            <li><a href="index.html#classification">CLASSIFICATION</a></li>
+            <li><a href="anomaly.html">ANOMALY</a></li>
+            <li><a href="index.html#link-system">LINK</a></li>
+            <li><a href="index.html#blessing">BLESSING</a></li>
+            <li><a href="characters.html" class="active">CHARACTERS</a></li>
+            <li><a href="gallery.html">GALLERY</a></li>
+        </ul>
+        <span class="nav-status">SYS.ONLINE</span>
+        <div class="menu-toggle">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <p class="page-tag">AGENT PROFILES</p>
+        <h1 class="page-title">CHARACTERS</h1>
+        <p class="page-subtitle">P.R.I.S.M. 소속 요원 아카이브</p>
+    </header>
+
+    <section class="filter-section">
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">전체</button>
+            <button class="filter-tab" data-filter="iris">IRIS</button>
+            <button class="filter-tab" data-filter="lucens">LUCENS</button>
+            <button class="filter-tab" data-filter="luster">LUSTER</button>
+            <button class="filter-tab" data-filter="blessing">가호자</button>
+        </div>
+    </section>
+
+    <section class="characters-section">
+        <div class="characters-grid">
+
+            <!-- Sample Character 1 - IRIS -->
+            <div class="character-card fade-in" data-category="iris blessing">
+                <div class="character-image">
+                    <div class="character-placeholder">Character Image</div>
+                    <span class="character-rank sss">SSS</span>
+                </div>
+                <div class="character-info">
+                    <p class="character-codename">CODENAME: AURORA</p>
+                    <h3 class="character-name">캐릭터 이름</h3>
+                    <div class="character-meta">
+                        <span class="meta-tag">IRIS</span>
+                        <span class="meta-tag type-combat">공격계</span>
+                        <span class="meta-tag blessing">가호자</span>
+                    </div>
+                    <p class="character-desc">
+                        이리스 소속 SSS급 요원. 캐릭터 설명이 들어갈 자리입니다.
+                    </p>
+                    <div class="character-details">
+                        <div class="detail-item">
+                            <span class="detail-label">소속</span>
+                            <span class="detail-value">이리스 직속</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">메이트</span>
+                            <span class="detail-value">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Character 2 - LUCENS -->
+            <div class="character-card fade-in" data-category="lucens">
+                <div class="character-image">
+                    <div class="character-placeholder">Character Image</div>
+                    <span class="character-rank s">S</span>
+                </div>
+                <div class="character-info">
+                    <p class="character-codename">CODENAME: PHANTOM</p>
+                    <h3 class="character-name">캐릭터 이름</h3>
+                    <div class="character-meta">
+                        <span class="meta-tag">LUCENS</span>
+                        <span class="meta-tag type-combat">공격계</span>
+                    </div>
+                    <p class="character-desc">
+                        루센스 소속 S급 요원. 캐릭터 설명이 들어갈 자리입니다.
+                    </p>
+                    <div class="character-details">
+                        <div class="detail-item">
+                            <span class="detail-label">소속</span>
+                            <span class="detail-value">특수대응팀</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">메이트</span>
+                            <span class="detail-value">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Character 3 - LUSTER -->
+            <div class="character-card fade-in" data-category="luster">
+                <div class="character-image">
+                    <div class="character-placeholder">Character Image</div>
+                    <span class="character-rank a">A</span>
+                </div>
+                <div class="character-info">
+                    <p class="character-codename">CODENAME: ECHO</p>
+                    <h3 class="character-name">캐릭터 이름</h3>
+                    <div class="character-meta">
+                        <span class="meta-tag">LUSTER</span>
+                        <span class="meta-tag type-support">서포트계</span>
+                    </div>
+                    <p class="character-desc">
+                        러스터 소속 A급 요원. 캐릭터 설명이 들어갈 자리입니다.
+                    </p>
+                    <div class="character-details">
+                        <div class="detail-item">
+                            <span class="detail-label">소속</span>
+                            <span class="detail-value">의료지원팀</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">메이트</span>
+                            <span class="detail-value">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Character 4 - Exorcist -->
+            <div class="character-card fade-in" data-category="lucens blessing">
+                <div class="character-image">
+                    <div class="character-placeholder">Character Image</div>
+                    <span class="character-rank ss">SS</span>
+                </div>
+                <div class="character-info">
+                    <p class="character-codename">CODENAME: REQUIEM</p>
+                    <h3 class="character-name">캐릭터 이름</h3>
+                    <div class="character-meta">
+                        <span class="meta-tag">LUCENS</span>
+                        <span class="meta-tag type-exorcist">퇴마계</span>
+                        <span class="meta-tag blessing">가호자</span>
+                    </div>
+                    <p class="character-desc">
+                        루센스 소속 SS급 퇴마계 요원. 캐릭터 설명이 들어갈 자리입니다.
+                    </p>
+                    <div class="character-details">
+                        <div class="detail-item">
+                            <span class="detail-label">소속</span>
+                            <span class="detail-value">괴이 관측국</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">메이트</span>
+                            <span class="detail-value">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Character 5 -->
+            <div class="character-card fade-in" data-category="lucens">
+                <div class="character-image">
+                    <div class="character-placeholder">Character Image</div>
+                    <span class="character-rank b">B</span>
+                </div>
+                <div class="character-info">
+                    <p class="character-codename">CODENAME: SPARK</p>
+                    <h3 class="character-name">캐릭터 이름</h3>
+                    <div class="character-meta">
+                        <span class="meta-tag">LUCENS</span>
+                        <span class="meta-tag type-combat">공격계</span>
+                    </div>
+                    <p class="character-desc">
+                        루센스 소속 B급 요원. 캐릭터 설명이 들어갈 자리입니다.
+                    </p>
+                    <div class="character-details">
+                        <div class="detail-item">
+                            <span class="detail-label">소속</span>
+                            <span class="detail-value">현장대응팀</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">메이트</span>
+                            <span class="detail-value">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Character 6 -->
+            <div class="character-card fade-in" data-category="luster">
+                <div class="character-image">
+                    <div class="character-placeholder">Character Image</div>
+                    <span class="character-rank s">S</span>
+                </div>
+                <div class="character-info">
+                    <p class="character-codename">CODENAME: PRISM</p>
+                    <h3 class="character-name">캐릭터 이름</h3>
+                    <div class="character-meta">
+                        <span class="meta-tag">LUSTER</span>
+                        <span class="meta-tag type-support">서포트계</span>
+                    </div>
+                    <p class="character-desc">
+                        러스터 소속 S급 요원. 캐릭터 설명이 들어갈 자리입니다.
+                    </p>
+                    <div class="character-details">
+                        <div class="detail-item">
+                            <span class="detail-label">소속</span>
+                            <span class="detail-value">정보분석팀</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">메이트</span>
+                            <span class="detail-value">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </section>
+
+    <footer>
+        <h3 class="footer-brand">P.R.I.S.M.</h3>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="characters.html">Characters</a>
+            <a href="gallery.html">Gallery</a>
+        </div>
+        <p class="footer-copyright">© 2058 P.R.I.S.M. FOUNDATION. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        // Mobile Menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navCenter = document.querySelector('.nav-center');
+        menuToggle.addEventListener('click', () => navCenter.classList.toggle('active'));
+        document.querySelectorAll('.nav-center a').forEach(link => {
+            link.addEventListener('click', () => navCenter.classList.remove('active'));
+        });
+
+        // Filter Tabs
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const characterCards = document.querySelectorAll('.character-card');
+
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const filter = tab.dataset.filter;
+
+                characterCards.forEach(card => {
+                    const categories = card.dataset.category.split(' ');
+                    if (filter === 'all' || categories.includes(filter)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
