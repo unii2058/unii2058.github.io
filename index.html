@@ -1258,6 +1258,198 @@
             color: rgba(255, 255, 255, 0.75);
         }
 
+        /* Threat Mindmap */
+        .threat-map-container {
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .map-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            color: var(--blue-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .map-subtitle {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--gray-mid);
+            margin-bottom: 2.5rem;
+        }
+
+        .mindmap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .map-root {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.25rem 2rem;
+            background: var(--blue-deep);
+            border: 1px solid var(--blue-accent);
+            border-radius: 12px;
+            min-width: 140px;
+        }
+
+        .map-label-en {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--blue-accent);
+        }
+
+        .map-label-kr {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white-pure);
+            margin-top: 0.25rem;
+        }
+
+        .map-connector {
+            width: 40px;
+            height: 2px;
+            background: var(--blue-mid);
+            position: relative;
+        }
+
+        .map-connector::after {
+            content: '●';
+            position: absolute;
+            right: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 8px;
+            color: var(--blue-mid);
+        }
+
+        .map-mid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1.75rem;
+            background: var(--blue-navy);
+            border: 1px solid var(--blue-mid);
+            border-radius: 10px;
+            min-width: 120px;
+        }
+
+        .mid-label-en {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: var(--blue-light);
+        }
+
+        .mid-label-kr {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--white-pure);
+            margin-top: 0.2rem;
+        }
+
+        .map-branches {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .map-branch {
+            display: flex;
+            align-items: center;
+        }
+
+        .branch-line {
+            width: 30px;
+            height: 2px;
+            background: var(--silver);
+        }
+
+        .map-node {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0.9rem 1.5rem;
+            background: var(--white-pure);
+            border: 1px solid var(--silver);
+            border-radius: 10px;
+            min-width: 160px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .map-node:hover {
+            border-color: var(--blue-accent);
+            box-shadow: 0 4px 16px rgba(74, 159, 212, 0.15);
+            transform: translateX(4px);
+        }
+
+        .node-en {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--gray-mid);
+        }
+
+        .node-kr {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--blue-dark);
+            margin-top: 0.15rem;
+        }
+
+        .node-sub {
+            font-family: var(--font-elegant);
+            font-size: 0.75rem;
+            color: var(--gray-light);
+            margin-top: 0.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .mindmap {
+                flex-direction: column;
+                gap: 0;
+            }
+            .map-connector {
+                width: 2px;
+                height: 25px;
+            }
+            .map-connector::after {
+                right: 50%;
+                top: auto;
+                bottom: -4px;
+                transform: translateX(50%);
+            }
+            .map-branches {
+                align-items: center;
+            }
+            .branch-line {
+                display: none;
+            }
+            .map-node {
+                align-items: center;
+                text-align: center;
+            }
+            .map-root, .map-mid {
+                min-width: 160px;
+            }
+        }
+
         /* Nano Ether Section */
         .ether-section {
             background: linear-gradient(135deg, var(--blue-navy) 0%, var(--blue-deep) 100%);
@@ -2671,7 +2863,7 @@
                 </p>
                 <p>
                     그러나 위협은 사라지지 않았습니다. 2년 주기로 찾아오는 대규모 아비수스 「웨이브」<br>
-                    <span class="accent">어노말리</span>—리미널 스페이스, 괴이, 저주, 도시괴담은
+                    <span class="accent">페노메논</span>—리미널 스페이스, 괴이, 저주, 도시괴담은
                     여전히 우리 곁에 은밀히 잠복해 있으며,
                     P.R.I.S.M.은 이들을 조용히 처리하고 있습니다.
                 </p>
@@ -2698,6 +2890,41 @@
                     <div class="timeline-cell">
                         <span>2058</span>
                         <p>현재 — 안정기</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Threat Hierarchy Mindmap -->
+        <div class="threat-map-container fade-in">
+            <h3 class="map-title">위협 요소 분류 체계</h3>
+            <p class="map-subtitle">THREAT CLASSIFICATION</p>
+            <div class="mindmap">
+                <div class="map-root">
+                    <span class="map-label-en">PHENOMENON</span>
+                    <span class="map-label-kr">페노메논</span>
+                </div>
+                <div class="map-connector"></div>
+                <div class="map-mid">
+                    <span class="mid-label-en">ANOMALY</span>
+                    <span class="mid-label-kr">어노말리</span>
+                </div>
+                <div class="map-connector"></div>
+                <div class="map-branches">
+                    <div class="map-branch">
+                        <div class="branch-line"></div>
+                        <div class="map-node">
+                            <span class="node-en">GHOST</span>
+                            <span class="node-kr">괴이</span>
+                            <span class="node-sub">크리처 · 귀신 · 저주</span>
+                        </div>
+                    </div>
+                    <div class="map-branch">
+                        <div class="branch-line"></div>
+                        <div class="map-node">
+                            <span class="node-en">LIMINAL SPACE</span>
+                            <span class="node-kr">리미널 스페이스</span>
+                        </div>
                     </div>
                 </div>
             </div>
