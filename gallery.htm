@@ -1,22 +1,9 @@
-<!DOCTYPE html>
+Put your HTML text here<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parallel | P.R.I.S.M. Internal Network</title>
-    <script>
-        // 새로고침 감지 - 즉시 메인으로 리다이렉트
-        const navEntries = performance.getEntriesByType('navigation');
-        if (navEntries.length > 0 && navEntries[0].type === 'reload') {
-            sessionStorage.clear();
-            localStorage.removeItem('prism_bgm_volume');
-            localStorage.removeItem('prism_bgm_time');
-            localStorage.removeItem('prism_bgm_playing');
-            localStorage.removeItem('prism_bgm_muted');
-            window.location.replace('/index.html');
-        }
-    </script>
-    <link rel="preload" href="prism.mp3" as="audio">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -731,19 +718,19 @@
 </head>
 <body>
     <nav>
-        <a href="/index.html" class="logo-area">
+        <a href="./index.html" class="logo-area">
             <div class="logo-symbol">✦</div>
             <span class="logo-text">P.R.I.S.M.</span>
         </a>
         <ul class="nav-center" id="nav-menu">
-            <li><a href="/index.html#about">ABOUT</a></li>
-            <li><a href="/index.html#facility">FACILITY</a></li>
-            <li><a href="/index.html#classification">CLASSIFICATION</a></li>
-            <li><a href="/anomaly.html">ANOMALY</a></li>
-            <li><a href="/index.html#link-system">LINK</a></li>
-            <li><a href="/index.html#blessing">BLESSING</a></li>
-            <li><a href="/characters.html">CHARACTERS</a></li>
-            <li><a href="/gallery.html" class="active">GALLERY</a></li>
+            <li><a href="./index.html#about">ABOUT</a></li>
+            <li><a href="./index.html#facility">FACILITY</a></li>
+            <li><a href="./index.html#classification">CLASSIFICATION</a></li>
+            <li><a href="anomaly.html">ANOMALY</a></li>
+            <li><a href="./index.html#link-system">LINK</a></li>
+            <li><a href="./index.html#blessing">BLESSING</a></li>
+            <li><a href="characters.html">CHARACTERS</a></li>
+            <li><a href="gallery.html" class="active">GALLERY</a></li>
         </ul>
         <div class="music-player">
             <span class="music-hint">BGM ♪</span>
@@ -850,7 +837,7 @@
                     </div>
                     <div class="post-more">•••</div>
                 </div>
-                <div class="post-image">[이미지를 추가하세요]</div>
+                <div class="post-image"><img src= "https://i.ibb.co/Wpnr053v/NAIS-INPAINT-1774020974330.webp" style="width: 100%; height: auto;"></div>
                 <div class="post-actions">
                     <div class="action-btn liked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
                     <div class="action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
@@ -858,21 +845,21 @@
                     <div class="action-btn save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
                 </div>
                 <div class="post-likes">좋아요 342개</div>
-                <div class="post-caption"><strong>prism.official</strong> 2058년 새해를 맞이하여 전 요원에게 복지 포인트가 지급됩니다. ✨ <span class="hashtag">#PRISM</span> <span class="hashtag">#NewYear2058</span></div>
+                <div class="post-caption"><strong>nine</strong> 퇴근 길 재단 인근에 새로운 카페로🦊 <span class="hashtag">#PRISM</span> <span class="hashtag">#카페탐방</span> <span class="hashtag">#너무달아</span>  </div>
                 <div class="post-comments">
                     <div class="view-comments">댓글 47개 모두 보기</div>
                     <div class="comment">
                         <div class="comment-avatar">A</div>
                         <div class="comment-content">
-                            <p class="comment-text"><strong>agent.alpha</strong> 드디어! <span class="mention">@agent.beta</span> 카페 갈 때 써야겠다 ㅋㅋㅋ</p>
+                            <p class="comment-text"><strong>의료팀.존</strong> 과도한 당분 섭취는 좋지 않습니다.</p>
                             <div class="comment-meta"><span>2시간</span><span>좋아요 12개</span><span>답글 달기</span></div>
                         </div>
                         <div class="comment-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
                     </div>
                     <div class="comment">
-                        <div class="comment-avatar">B</div>
+                        <div class="comment-avatar">9</div>
                         <div class="comment-content">
-                            <p class="comment-text"><strong>agent.beta</strong> <span class="mention">@agent.alpha</span> ㅇㅇ 난 도서관 이용권 신청할래</p>
+                            <p class="comment-text"><strong>nine</strong> <span class="mention">@의료팀.존</span> 내맘이야 🦊</p>
                             <div class="comment-meta"><span>1시간</span><span>좋아요 8개</span><span>답글 달기</span></div>
                         </div>
                         <div class="comment-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
@@ -890,7 +877,7 @@
                     </div>
                     <div class="post-more">•••</div>
                 </div>
-                <div class="post-image">[이미지를 추가하세요]</div>
+                <div class="post-image"><img src= "https://i.ibb.co/5xYLRwkJ/NAIS-INPAINT-1774065807819.webp" style="width: 100%; height: auto;"> </div>
                 <div class="post-actions">
                     <div class="action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
                     <div class="action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
@@ -898,7 +885,7 @@
                     <div class="action-btn save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
                 </div>
                 <div class="post-likes">좋아요 1,247개</div>
-                <div class="post-caption"><strong>iris.division</strong> 이번 S급 위협 무력화 작전에 참여한 모든 요원들에게 감사를 전합니다. 빛은 어둠을 이깁니다. ⭐ <span class="hashtag">#IRIS</span> <span class="hashtag">#빛의영웅</span></div>
+                <div class="post-caption"><strong>iris.division</strong> 퀸스 괴이 소탕 작전에 참여하신 식스님 노고에 감사합니다⭐ <span class="hashtag">#IRIS</span> <span class="hashtag">#빛의영웅</span></div>
                 <div class="post-comments">
                     <div class="view-comments">댓글 189개 모두 보기</div>
                     <div class="comment">
@@ -912,15 +899,15 @@
                     <div class="comment">
                         <div class="comment-avatar" style="background: #d4eaf7; color: #2d5a87;">S</div>
                         <div class="comment-content">
-                            <p class="comment-text"><strong>support.healing</strong> <span class="class-badge luster">LUSTER</span> 다친 요원들 모두 회복 완료! 다들 고생하셨어요 💙</p>
+                            <p class="comment-text"><strong>support.healing</strong> 구도가...😂 식스님 표정 되게 뚱하신데.</p>
                             <div class="comment-meta"><span>4시간</span><span>좋아요 156개</span><span>답글 달기</span></div>
                         </div>
                         <div class="comment-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
                     </div>
                     <div class="comment">
-                        <div class="comment-avatar">R</div>
+                        <div class="comment-avatar">6</div>
                         <div class="comment-content">
-                            <p class="comment-text"><strong>rookie.2058</strong> 언제쯤 저도 이런 작전에... 😭 <span class="mention">@lucens.unit07</span> 선배님 대단해요!!</p>
+                            <p class="comment-text"><strong>six</strong> ...도촬 하지마시죠. 당장 게시물 내리세요.<span>
                             <div class="comment-meta"><span>3시간</span><span>좋아요 24개</span><span>답글 달기</span></div>
                         </div>
                         <div class="comment-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
@@ -970,6 +957,18 @@
     </audio>
 
     <script>
+        // ========== 새로고침 감지 - 새로고침 시 음악 상태 초기화 ==========
+        const navEntries = performance.getEntriesByType('navigation');
+        const isReload = navEntries.length > 0 && navEntries[0].type === 'reload';
+        
+        if (isReload) {
+            localStorage.removeItem('prism_bgm_volume');
+            localStorage.removeItem('prism_bgm_time');
+            localStorage.removeItem('prism_bgm_playing');
+            localStorage.removeItem('prism_bgm_muted');
+            window.scrollTo(0, 0);
+        }
+
         // ========== MUSIC PLAYER WITH PERSISTENCE ==========
         const musicBtn = document.getElementById('music-btn');
         const bgm = document.getElementById('bgm');
@@ -994,6 +993,10 @@
                 volumeSlider.value = 70;
             }
 
+            if (savedTime !== null) {
+                bgm.currentTime = parseFloat(savedTime);
+            }
+
             if (savedMuted) {
                 bgm.muted = true;
                 volIcon.style.display = 'none';
@@ -1001,38 +1004,13 @@
             }
 
             if (wasPlaying) {
-                const startPlayback = () => {
-                    if (savedTime !== null) {
-                        bgm.currentTime = parseFloat(savedTime);
-                    }
-                    bgm.play().then(() => {
-                        musicBtn.classList.add('playing');
-                    }).catch(e => console.log('Autoplay blocked'));
-                };
-
-                if (bgm.readyState >= 3) {
-                    startPlayback();
-                } else {
-                    bgm.addEventListener('canplay', startPlayback, { once: true });
-                }
-            } else if (savedTime !== null) {
-                bgm.currentTime = parseFloat(savedTime);
+                bgm.play().then(() => {
+                    musicBtn.classList.add('playing');
+                }).catch(e => console.log('Autoplay blocked'));
             }
         }
 
-        let saveTimeout = null;
         function saveMusicState() {
-            if (saveTimeout) return;
-            saveTimeout = setTimeout(() => {
-                localStorage.setItem('prism_bgm_volume', bgm.volume);
-                localStorage.setItem('prism_bgm_time', bgm.currentTime);
-                localStorage.setItem('prism_bgm_playing', !bgm.paused);
-                localStorage.setItem('prism_bgm_muted', bgm.muted);
-                saveTimeout = null;
-            }, 100);
-        }
-
-        function saveMusicStateNow() {
             localStorage.setItem('prism_bgm_volume', bgm.volume);
             localStorage.setItem('prism_bgm_time', bgm.currentTime);
             localStorage.setItem('prism_bgm_playing', !bgm.paused);
@@ -1047,7 +1025,7 @@
                 bgm.pause();
                 musicBtn.classList.remove('playing');
             }
-            saveMusicStateNow();
+            saveMusicState();
         });
 
         volumeSlider.addEventListener('input', (e) => {
@@ -1072,22 +1050,16 @@
                 volIcon.style.display = 'none';
                 muteIcon.style.display = 'block';
             }
-            saveMusicStateNow();
+            saveMusicState();
         });
 
         bgm.addEventListener('timeupdate', saveMusicState);
         bgm.addEventListener('ended', () => {
             musicBtn.classList.remove('playing');
-            saveMusicStateNow();
+            saveMusicState();
         });
 
-        window.addEventListener('beforeunload', saveMusicStateNow);
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) saveMusicStateNow();
-        });
-        document.querySelectorAll('a[href^="/"]').forEach(link => {
-            link.addEventListener('click', saveMusicStateNow);
-        });
+        window.addEventListener('beforeunload', saveMusicState);
         loadMusicState();
 
         // Menu toggle
